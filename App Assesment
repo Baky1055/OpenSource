@@ -1,0 +1,121 @@
+
+from appium import webdriver
+from selenium.webdriver.support.ui import Select
+from appium.webdriver.common.touch_action import TouchAction
+from selenium.webdriver.common.by import By
+import time
+
+appium_server = "http://127.0.0.1:4723/wd/hub"
+
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "emulator-5554",
+    # "appPackage": "com.android.launcher3",
+    # "appActivity": ".MainActivity",
+}
+
+driver = webdriver.Remote(appium_server, desired_caps)
+time.sleep(5)
+
+def Customer_add_products_in_his_shopping_cart():
+    try:
+        # click on the app
+        open_app =driver.find_element(By.XPATH, '//android.widget.TextView[@content-desc="NopStation Cart"]')
+        open_app.click()
+
+        # click on the electronics category
+        electronics_category = driver.find_element(By.XPATH,'(//android.widget.ImageView[@content-desc="Placeholder"])[4]')
+        electronics_category.click()
+
+        # click on the mattress bedroom
+        mattress_bed=driver.find_element(By.XPATH, '(//android.widget.ImageView[@content-desc="Placeholder"])[9]')
+        mattress_bed.click()
+
+        # Add qty
+        add_bed_qty=driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnPlus")
+        add_bed_qty.click()
+
+        # Add to cart
+        add_to_cart=driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnAddToCart")
+        add_to_cart.click()
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+
+def Customer_successfully_place_order_as_a_guest_user():
+    try:
+        # Mike go to shopping cart by clicking top cart icon
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/counterText").click()
+
+        # Mike click checkout button from shopping cart page
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnCheckOut").click()
+
+        # Mike select checkout as guest from shopping cart page
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnGuestCheckout").click()
+
+        # Mike input all the details in checkout billing details page and click continue
+        # Input first Name
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etFirstName").send_keys('Mr')
+
+        # Input last name
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etLastName").send_keys('khan')
+
+        # input email
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etEmail").send_keys('mrk3218@gmail.com')
+
+        # Select country name from dropdown
+        dropdown=driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/countrySpinner")
+        select = Select(dropdown)
+        select.select_by_visible_text('Afghanistan')
+        select.select_by_visible_text('Other')
+
+        # Input company name
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etCompanyName").send_keys('abc limited')
+
+        # Input City Name
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etCity").send_keys('Dhaka')
+
+        # Input Address
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etStreetAddress").send_keys('ketamine')
+
+
+        # Input Postal code
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etZipCode").send_keys('1212')
+
+        # Input Phone no
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/etPhone").send_keys('012689062047')
+
+
+        # click on continue
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnContinue").click()
+
+
+        # Mike select "Next Day Air" as shipping method and click continue
+        # click on the shipping
+        shipping=driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/menu_shipping")
+        select=Select(shipping)
+        select.select_by_visible_text('Next Day Air')
+
+        # click on continue
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnContinue").click()
+
+        # Mike select "Check/Money Order" as payment method and click continue
+        payment=driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/menu_payment")
+        select=Select(payment)
+        select.select_by_visible_text('bKash Payment ($20.00)')
+
+        # click continue
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/btnContinue").click()
+
+        # Mike click confirm button to place the order
+        driver.find_element(By.ID, "com.nopstation.nopcommerce.nopstationcart:id/checkoutButton").click()
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+Customer_add_products_in_his_shopping_cart()
+Customer_successfully_place_order_as_a_guest_user()
+time.sleep(10)
+driver.quit()
+
